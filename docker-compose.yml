@@ -1,43 +1,53 @@
 version: '3.8'
 
 services:
-  medusa:
-    build: .
+  server:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
     depends_on:
-      - postgres
-      - elasticsearch
+      - ecommercedb
+      # - elasticsearch
       - redis
     ports:
       - '9000:9000'
-    environment:
-      - DATABASE_URL=postgres://grocia_app_admin:app_admin_password@postgres:5432/grociadb
-      - NODE_ENV=development
-      - JWT_SECRET=jkasjdk79898%&/!askns
-      - COOKIE_SECRET=somethingjkasjdk79898%&/!askns
-      - DATABASE_TYPE=postgres
-      - REDIS_URL=redis://cache
-    volumes:
-      - medusa_data:/data
-  elasticsearch:
-    image: elasticsearch:8.12.0
-    environment:
-      - discovery.type=single-node
-    ports:
-      - '9200:9200'
-      - '9300:9300'
+      - '7001:7001'
+    env_file:
+      - path: ./docker/docker.env
+        require: true
+  # searchdb:
+  #   image: elasticsearch:8.12.0
+  #   environment:
+  #     - discovery.type=single-node
+  #   ports:
+  #     - '9200:9200'
+  #     - '9300:9300'
   redis:
-    image: redis:latest
-    container_name: cache
+    image: redis:7.2.4
     expose:
       - 6379
-  postgres:
+  ecommercedb:
     image: postgres:16
+    ports:
+      - '5432:5432'
+    restart: always
     environment:
-      - POSTGRES_DB=grociadb
-      - POSTGRES_USER=grocia_app_admin
+      - POSTGRES_DB=groccia
+      - POSTGRES_USER=groccia_app_admin
       - POSTGRES_PASSWORD=app_admin_password
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - ecommerce-data:/var/lib/postgresql/data
+  cmsdb:
+    image: postgres:16
+    ports:
+      - '5433:5432'
+    restart: always
+    environment:
+      - POSTGRES_DB=storefront
+      - POSTGRES_USER=storefront_cms
+      - POSTGRES_PASSWORD=cms_admin_password
+    volumes:
+      - cms-data:/var/lib/postgresql/data
 volumes:
-  medusa_data:
-  postgres_data:
+  ecommerce-data:
+  cms-data:

@@ -13,8 +13,7 @@ RUN npm install -g npm@latest
 RUN npm install @medusajs/medusa-cli@latest -g
 RUN npm install --loglevel=error
 
-# Make port 9000 available to the world outside this container
-EXPOSE 9000
+EXPOSE 9000 7001
 
 # Run MedusaJS when the container launches
 ENTRYPOINT ["sh", "./scripts/develop.sh", "develop"]
