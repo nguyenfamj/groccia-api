@@ -73,6 +73,9 @@ const plugins = [
       },
     },
   },
+  {
+    resolve: '@groccia/groccia-medusa-postcode-plugin',
+  },
 ];
 
 const modules = {
