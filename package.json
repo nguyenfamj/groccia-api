@@ -1,5 +1,5 @@
 {
-  "name": "grocia-api",
+  "name": "@groccia/api",
   "version": "0.0.1",
   "description": "",
   "author": "",
@@ -24,7 +24,7 @@
     "dev": "cross-env npm run build:server && medusa develop"
   },
   "dependencies": {
-    "@groccia/groccia-medusa-postcode-plugin": "^0.0.1",
+    "@groccia/medusa-postcode-plugin": "^0.0.1",
     "@medusajs/admin": "^7.1.10",
     "@medusajs/cache-inmemory": "^1.8.9",
     "@medusajs/cache-redis": "^1.8.9",
