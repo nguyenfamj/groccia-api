@@ -31,6 +31,17 @@ const DATABASE_URL = process.env.DATABASE_URL || 'postgres://localhost/medusa-st
 
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:9000';
+const ADMIN_URL = process.env.ADMIN_URL || 'http://localhost:7000';
+const STOREFRONT_URL = process.env.STOREFRONT_URL || 'http://localhost:8000';
+
+// Social Auth
+const GoogleClientId = process.env.GOOGLE_CLIENT_ID || '';
+const GoogleClientSecret = process.env.GOOGLE_CLIENT_SECRET || '';
+
+const FacebookClientId = process.env.FACEBOOK_CLIENT_ID || '';
+const FacebookClientSecret = process.env.FACEBOOK_CLIENT_SECRET || '';
+
 const plugins = [
   `medusa-fulfillment-manual`,
   `medusa-payment-manual`,
@@ -52,6 +63,46 @@ const plugins = [
   },
   {
     resolve: '@groccia/medusa-postcode-plugin',
+  },
+  {
+    resolve: 'medusa-plugin-auth',
+    /** @type {import('medusa-plugin-auth').AuthOptions} */
+    options: [
+      {
+        type: 'google',
+        strict: 'none',
+        identifier: 'google',
+        clientID: GoogleClientId,
+        clientSecret: GoogleClientSecret,
+        admin: {
+          callbackUrl: `${BACKEND_URL}/admin/auth/google/cb`,
+          failureRedirect: `${ADMIN_URL}/login`,
+          successRedirect: `${ADMIN_URL}/`,
+        },
+        store: {
+          callbackUrl: `${BACKEND_URL}/store/auth/google/cb`,
+          failureRedirect: `${STOREFRONT_URL}/`,
+          successRedirect: `${STOREFRONT_URL}/`,
+        },
+      },
+      {
+        type: 'facebook',
+        strict: 'none',
+        identifier: 'facebook',
+        clientID: FacebookClientId,
+        clientSecret: FacebookClientSecret,
+        admin: {
+          callbackUrl: `${BACKEND_URL}/admin/auth/facebook/cb`,
+          failureRedirect: `${ADMIN_URL}/login`,
+          successRedirect: `${ADMIN_URL}/`,
+        },
+        store: {
+          callbackUrl: `${BACKEND_URL}/store/auth/facebook/cb`,
+          failureRedirect: `${STOREFRONT_URL}/`,
+          successRedirect: `${STOREFRONT_URL}/`,
+        },
+      },
+    ],
   },
 ];
 
