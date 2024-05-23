@@ -64,9 +64,6 @@ const plugins = [
     },
   },
   {
-    resolve: "@groccia/medusa-postcode-plugin",
-  },
-  {
     resolve: "medusa-plugin-auth",
     /** @type {import('medusa-plugin-auth').AuthOptions} */
     options: [
